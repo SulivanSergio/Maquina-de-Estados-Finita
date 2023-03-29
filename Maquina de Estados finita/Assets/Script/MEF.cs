@@ -1,5 +1,8 @@
+using MoonSharp.Interpreter;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 
@@ -27,6 +30,10 @@ public class MEF
 
     private Color[] color = new Color[5];
 
+    Script script = new Script();
+    DynValue res;
+    string lua = "";
+
     public MEF(Mesh mesh, Material material, int id)
     {
         gameObject = new GameObject("Bola" + id);
@@ -42,29 +49,42 @@ public class MEF
         color[3] = Color.gray;
         color[4] = Color.yellow;
 
-        gameObject.GetComponent<MeshRenderer>().material.color = color[Random.Range(0,5)];
+        gameObject.GetComponent<MeshRenderer>().material.color = color[UnityEngine.Random.Range(0,5)];
 
 
-        
+        LoadLua();
+        DeclaraFunc();
+
 
     }
 
+    private void LoadLua()
+    {
+        lua = File.ReadAllText(@"D:\Documentos\Ifrj\Setimo periodo\IA\Maquina-de-Estados-Finita\Maquina de Estados finita\Assets\Script\Lua.lua");
+        script.DoString(lua);
+    }
+    private void DeclaraFunc()
+    {
+        script.Globals["UpdateState"] = (Func<float, float>)UpdateState;
 
+    }
 
     public void Update(float gameTime)
     {
         tempo++;
-        UpdateState(gameTime);
+        //UpdateState(gameTime);
         if(tempo >= MAX)
         {
             tempo = 0;
             ChangeState();
         }
 
+        LoadLua();
+        res = script.Call(script.Globals.Get("Update"),gameTime);
 
     }
 
-    public void UpdateState(float gameTime)
+    public float UpdateState(float gameTime)
     {
         switch(state)
         {
@@ -90,12 +110,12 @@ public class MEF
 
         }
 
-
+        return 0;
     }
 
     public void ChangeState()
     {
-        int r = Random.Range(0, 5);
+        int r = UnityEngine.Random.Range(0, 5);
         switch (state)
         {
             case STATE.XP:

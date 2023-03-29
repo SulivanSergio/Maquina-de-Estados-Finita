@@ -1,10 +1,9 @@
-function Start()
-a = a
-end
-function Update()
-b = b
+function Start(a)
+a = a + 1
+return a
 end
 
-function UpdateStateLua()
-  c= c
+function Update(gameTime)
+	 UpdateState(gameTime)
 end
+
