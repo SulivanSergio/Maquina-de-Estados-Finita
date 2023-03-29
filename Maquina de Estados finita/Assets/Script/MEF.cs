@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class MEF
 {
     public enum STATE {
@@ -14,6 +16,7 @@ public class MEF
     
     }
 
+    
 
     private GameObject gameObject;
     private STATE state = STATE.YP;
@@ -40,6 +43,10 @@ public class MEF
         color[4] = Color.yellow;
 
         gameObject.GetComponent<MeshRenderer>().material.color = color[Random.Range(0,5)];
+
+
+        
+
     }
 
 
