@@ -9,17 +9,18 @@ using System;
 
 public class Main : MonoBehaviour
 {
-    private const int MAX = 10;
+    private const int MAX = 30;
 
     public Mesh mesh;
     public Material material;
-    MEF[] mef = new MEF[MAX];
+    public MEF[] mef = new MEF[MAX];
 
-    
+    public static Main instance;
     
 
     void Start()
     {
+        instance = this;
         
         for(int i = 0; i < mef.Length; i++)
         {

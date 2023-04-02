@@ -21,18 +21,21 @@ public class MEF
 
     
 
-    private GameObject gameObject;
+    public GameObject gameObject;
     private STATE state = STATE.YP;
 
-    private float speed = 10;
+    private float speed = 5f;
     private int tempo = 0;
-    private float MAX = 5;
+    private float MAX = 2;
 
     private Color[] color = new Color[5];
 
     Script script = new Script();
     DynValue res;
     string lua = "";
+
+    
+    
 
     public MEF(Mesh mesh, Material material, int id)
     {
@@ -42,6 +45,12 @@ public class MEF
         gameObject.GetComponent<MeshFilter>().mesh = mesh;
         gameObject.GetComponent<MeshRenderer>().material = material;
         gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        gameObject.tag = "Bola";
+        gameObject.AddComponent<SphereCollider>();
+        gameObject.GetComponent<SphereCollider>().isTrigger = true;
+        gameObject.AddComponent<Rigidbody>();
+        gameObject.GetComponent<Rigidbody>().useGravity = false;
+        gameObject.AddComponent<Objeto>();
 
         color[0] = Color.red;
         color[1] = Color.blue;
@@ -55,6 +64,7 @@ public class MEF
         LoadLua();
         DeclaraFunc();
 
+        
 
     }
 
@@ -78,9 +88,13 @@ public class MEF
             tempo = 0;
             ChangeState();
         }
+        
+
 
         LoadLua();
         res = script.Call(script.Globals.Get("Update"),gameTime);
+
+
 
     }
 
@@ -258,8 +272,16 @@ public class MEF
         }
     }
 
+    public void OncollisionEnter(Collider collider)
+    {
 
+        if (collider.gameObject.tag == "Bola")
+        {
+            collider.gameObject.SetActive(false);
+        }
 
-
+    }
+    
+    
 
 }
