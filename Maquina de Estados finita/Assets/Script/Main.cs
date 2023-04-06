@@ -9,14 +9,17 @@ using System;
 
 public class Main : MonoBehaviour
 {
-    private const int MAX = 30;
+    private const int MAX = 1;
 
     public Mesh mesh;
     public Material material;
     public MEF[] mef = new MEF[MAX];
 
     public static Main instance;
-    
+
+
+    public GameObject inimigo;
+    Player player;
 
     void Start()
     {
@@ -27,10 +30,11 @@ public class Main : MonoBehaviour
             mef[i] = new MEF(mesh,material,i);
         }
 
-        
+
         //File.WriteAllText(@"D:\Documentos\Ifrj\Setimo periodo\IA\Maquina-de-Estados-Finita\Maquina de Estados finita\Assets\Script\Lua.lua", lua);
-        
-        
+
+
+        player = new Player(mesh,material,inimigo);
 
         
     }
@@ -42,8 +46,9 @@ public class Main : MonoBehaviour
         {
             mef[i].Update(Time.deltaTime);
         }
-        
 
+        player.Update(Time.deltaTime);
+        player.AtualizaObjeto(inimigo);
     }
     
 
